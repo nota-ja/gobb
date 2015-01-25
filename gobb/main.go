@@ -69,6 +69,9 @@ func main() {
 	if selected_template == "default" {
 		pkg, _ := build.Import("github.com/stevenleeg/gobb/gobb", ".", build.FindOnly)
 		static_path := filepath.Join(pkg.SrcRoot, pkg.ImportPath, "../templates")
+		if utils.RunWithoutGoenv {
+			static_path = filepath.Join(utils.Buildpath, "templates")
+		}
 		r.PathPrefix("/static/").Handler(http.FileServer(http.Dir(static_path)))
 	} else {
 		static_path := filepath.Join(base_path, "templates", selected_template)
